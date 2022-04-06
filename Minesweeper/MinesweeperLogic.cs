@@ -8,5 +8,6 @@ namespace Minesweeper
 {
     internal class MinesweeperLogic
     {
+
     }
 }

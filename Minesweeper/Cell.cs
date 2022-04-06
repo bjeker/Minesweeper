@@ -10,10 +10,11 @@ using System.Windows.Forms;
 
 namespace Minesweeper
 {
-    public partial class cell : UserControl
+    public partial class Cell : UserControl
     {
         //button
-        Button button = new Button();
+        Button cellButton = new Button();
+        Random rand = new Random();
         //size of cell
         int sizeOfCell = 32;
         //location of the cells
@@ -22,29 +23,32 @@ namespace Minesweeper
 
         public EventHandler CellClick;
 
-        public cell()
+        //each cell
+        public Cell()
         {
             InitializeComponent();
             //set size of cell for x and y
             this.Size = new Size(sizeOfCell, sizeOfCell);
-            //removing bebbles, drop shadow???? mo natural padding???
-            Button.FlatStyle = FlatStyle.Flat;
-            Button.Size = new Size(sizeOfCell, sizeOfCell);
-            Button.Location = new Point(0, 0);
-            Button.BackColor = Color.LightGray;
-            Button.Click += ButtonCLickHandler;
-            this.Controls.Add(Button);
+            //removing bebbles, drop shadow???? no natural padding???
+            cellButton.FlatStyle = FlatStyle.Flat;
+            cellButton.Size = new Size(sizeOfCell, sizeOfCell);
+            cellButton.Location = new Point(0, 0);
+            cellButton.BackColor = Color.LightGray;
+            cellButton.Click += ButtonCLickHandler;
+            this.Controls.Add(cellButton);
+            this.BackColor = (rand.Next(2) % 2 == 0) ? Color.Red : Color.White;
         }
 
-        //get size of cell
+        //size, button, row, and col getters and setters
         public int SizeOfCell { get => sizeOfCell; }
-        public Button Button { get => button; }
+        public Button button { get => button; }
         public int Row { get => row; set => row = value; }
         public int Col { get => col; set => col = value; }
 
         //when button is clicked
         public void ButtonCLickHandler(object sender, EventArgs e)
         {
+            ((Button)sender).Visible = false;
             OnCellClick(this, e);
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace Minesweeper
 {
-    partial class cell
+    partial class Cell
     {
         /// <summary> 
         /// Required designer variable.

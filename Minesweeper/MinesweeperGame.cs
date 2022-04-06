@@ -8,12 +8,14 @@ namespace Minesweeper
 {
     internal class MinesweeperGame
     {
-        MinesweeperGame gui;
+        MinesweeperGUI gui;
         MinesweeperLogic logic;
 
-        MinesweeperGame()
+        public MinesweeperGame()
         {
-
+            gui = new MinesweeperGUI();
+            logic = new MinesweeperLogic();
+            Application.Run(gui);
         }
     }
 }
