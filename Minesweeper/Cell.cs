@@ -15,6 +15,8 @@ namespace Minesweeper
         //button
         Button cellButton = new Button();
         Random rand = new Random();
+        //cell content
+        char cellContent = ' ';
         //size of cell
         int sizeOfCell = 32;
         //location of the cells
@@ -59,6 +61,12 @@ namespace Minesweeper
             {
                 CellClick(sender, e);
             }
+        }
+
+        //handles the click of mouse
+        public void PerformClick()
+        {
+            cellButton.PerformClick();
         }
     }
 }
