@@ -16,6 +16,8 @@ namespace Minesweeper
             gui = new MinesweeperGUI();
             logic = new MinesweeperLogic();
             Application.Run(gui);
+            gui.PlaceBombs += logic.PlaceBombsHandler;
+            Application.Run(gui);
         }
     }
 }

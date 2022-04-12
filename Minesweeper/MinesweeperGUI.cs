@@ -2,7 +2,11 @@ namespace Minesweeper
 {
     public partial class MinesweeperGUI : Form
     {
+        public delegate void PlaceBombsEventHandler(object sender, PlaceBombsEventHandler e);
+        public event PlaceBombsEventHandler PlaceBombs;
+        bool firstClick = true;
         Cell[,] cells = new Cell[10, 10];
+
         public MinesweeperGUI()
         {
             InitializeComponent();
@@ -35,7 +39,11 @@ namespace Minesweeper
         {
             Cell currentCell = (Cell)sender;
             Color targetColor = ((Cell)sender).BackColor;
-
+            if (firstClick)
+            {
+                PlaceBombsNow(currentCell.Row, currentCell.Col);
+                firstClick = false;
+            }    
             CheckAbove(currentCell, targetColor);
             CheckBelow(currentCell, targetColor);
 
@@ -121,6 +129,21 @@ namespace Minesweeper
                         cells[currentCell.Row + 1, currentCell.Col + 1].PerformClick();
                     }
                 }
+            }
+        }
+
+        public void PlaceBombsNow(int row, int col)
+        {
+            PlaceBombsEventArgs e = new PlaceBombsEventArgs(row, col);
+            PlaceTheBombs(this, e);
+        }
+
+        //places bombs
+        protected virtual void PlaceTheBombs(object sender, PlaceBombsEventArgs e)
+        {
+            if (PlaceBombs != null)
+            {
+                PlaceBombs(this, e);
             }
         }
 

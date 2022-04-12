@@ -38,7 +38,8 @@ namespace Minesweeper
             cellButton.BackColor = Color.LightGray;
             cellButton.Click += ButtonCLickHandler;
             this.Controls.Add(cellButton);
-            this.BackColor = (rand.Next(2) % 2 == 0) ? Color.Red : Color.White;
+            this.BackColor = Color.WhiteSmoke;
+            //this.BackColor = (rand.Next(2) % 2 == 0) ? Color.Red : Color.White;
         }
 
         //size, button, row, and col getters and setters
