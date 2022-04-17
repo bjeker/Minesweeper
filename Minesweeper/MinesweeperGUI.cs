@@ -37,7 +37,9 @@ namespace Minesweeper
         //when cells are clicked
         public void CellClickHandler(object sender, EventArgs e)
         {
+            //clicked cell is the current cell
             Cell currentCell = (Cell)sender;
+            //clicked cells background color is the target color
             Color targetColor = ((Cell)sender).BackColor;
             if (firstClick)
             {
@@ -141,6 +143,7 @@ namespace Minesweeper
         //places bombs
         protected virtual void PlaceTheBombs(object sender, PlaceBombsEventArgs e)
         {
+            //raises flag for PlaceBombs event
             if (PlaceBombs != null)
             {
                 PlaceBombs(this, e);

@@ -11,7 +11,9 @@ namespace Minesweeper
         Random rand = new Random();
         public void PlaceBombsHandler(object sender, PlaceBombsEventArgs e)
         {
+            //gets information of clicked locations x
             int clickedRow = e.ClickLocation.Item1;
+            //gets information of clicked locations y
             int clickedCol = e.ClickLocation.Item2;
 
             List<Tuple<int, int>> response = new List<Tuple<int, int>>();
@@ -21,7 +23,17 @@ namespace Minesweeper
                 bool validChoice = false;
                 do
                 {
+                    //sets up new bomb location
                     Tuple<int, int> bombLocation = Tuple.Create(rand.Next(10), rand.Next(10));
+
+                    //NEW CODE I ADDED IN
+                    //adds new mine cell
+                    Cell cell = new Cell();
+                    cell.Row = bombLocation.Item1;
+                    cell.Col = bombLocation.Item2;
+                    cell.BackColor = Color.Green;
+
+                    //checks if valid locaiton
                     validChoice = CheckIfValidLocation(clickedRow, clickedCol, response, validChoice, bombLocation);
                 } while (!validChoice);
             }
@@ -29,12 +41,12 @@ namespace Minesweeper
 
         private bool CheckIfValidLocation(int clickedRow, int clickedCol, List<Tuple<int, int>> response, bool validChoice, Tuple<int, int> bombLocation)
         {
+            //checks if bombLocations row and col are not the same
             if (bombLocation.Item1 != clickedRow && bombLocation.Item2 != clickedCol)
             {
                 validChoice = true;
                 foreach (var location in response)
                 {
-
                     if (bombLocation.Item1 != location.Item1 && bombLocation.Item2 != location.Item2)
                     {
                         validChoice = false;
