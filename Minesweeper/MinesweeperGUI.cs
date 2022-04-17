@@ -2,7 +2,7 @@ namespace Minesweeper
 {
     public partial class MinesweeperGUI : Form
     {
-        public delegate void PlaceBombsEventHandler(object sender, PlaceBombsEventHandler e);
+        public delegate void PlaceBombsEventHandler(object sender, PlaceBombsEventArgs e);
         public event PlaceBombsEventHandler PlaceBombs;
         bool firstClick = true;
         Cell[,] cells = new Cell[10, 10];

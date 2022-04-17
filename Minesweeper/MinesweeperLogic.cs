@@ -41,7 +41,6 @@ namespace Minesweeper
                     }
                 }
             }
-
             return validChoice;
         }
     }
