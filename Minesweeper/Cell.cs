@@ -40,7 +40,7 @@ namespace Minesweeper
             //each cell has a button to be clicked
             this.Controls.Add(cellButton);
             //randomize cell colors
-            this.BackColor = (rand.Next(2) % 2 == 0) ? Color.Red : Color.White;
+            this.BackColor = Color.White;
         }
 
         //size, button, row, and col getters and setters

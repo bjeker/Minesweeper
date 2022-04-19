@@ -4,6 +4,10 @@ namespace Minesweeper
     {
         public delegate void PlaceBombsEventHandler(object sender, PlaceBombsEventArgs e);
         public event PlaceBombsEventHandler PlaceBombs;
+        //NEW CODE
+        public delegate void RandomCellEventHandler(object sender, RandomCellEventArgs e);
+        public event RandomCellEventHandler RandomCell;
+        //END OF NEW CODE
         bool firstClick = true;
         Cell[,] cells = new Cell[10, 10];
 
@@ -33,6 +37,9 @@ namespace Minesweeper
                     this.Controls.Add(cells[row, col]);
                 }
             }
+
+            //NEW CODE
+            GetRandomCells(cells);
         }
         //when cells are clicked
         public void CellClickHandler(object sender, EventArgs e)
@@ -43,6 +50,7 @@ namespace Minesweeper
             Color targetColor = ((Cell)sender).BackColor;
             if (firstClick)
             {
+                //NEW CODE ADDED CURRENT CELL TO END
                 PlaceBombsNow(currentCell.Row, currentCell.Col);
                 firstClick = false;
             }    
@@ -55,7 +63,7 @@ namespace Minesweeper
                 if (targetColor == cells[currentCell.Row, currentCell.Col - 1].BackColor)
                 {
                     //slow down program by 1 second each click
-                    Thread.Sleep(100);
+                    //Thread.Sleep(100);
                     cells[currentCell.Row, currentCell.Col - 1].PerformClick();
                 }
             }
@@ -64,7 +72,7 @@ namespace Minesweeper
                 if (targetColor == cells[currentCell.Row, currentCell.Col + 1].BackColor)
                 {
                     //slow down program by 1 second each click
-                    Thread.Sleep(100);
+                    //Thread.Sleep(100);
                     cells[currentCell.Row, currentCell.Col + 1].PerformClick();
                 }
             }
@@ -78,7 +86,7 @@ namespace Minesweeper
                 if (targetColor == cells[currentCell.Row - 1, currentCell.Col].BackColor)
                 {
                     //slow down program by 1 second each click
-                    Thread.Sleep(100);
+                    //Thread.Sleep(100);
                     cells[currentCell.Row - 1, currentCell.Col].PerformClick();
                 }
                 if (currentCell.Col > 0)
@@ -86,7 +94,7 @@ namespace Minesweeper
                     if (targetColor == cells[currentCell.Row - 1, currentCell.Col - 1].BackColor)
                     {
                         //slow down program by 1 second each click
-                        Thread.Sleep(100);
+                        //Thread.Sleep(100);
                         cells[currentCell.Row - 1, currentCell.Col - 1].PerformClick();
                     }
                 }
@@ -95,7 +103,7 @@ namespace Minesweeper
                     if (targetColor == cells[currentCell.Row - 1, currentCell.Col + 1].BackColor)
                     {
                         //slow down program by 1 second each click
-                        Thread.Sleep(100);
+                        //Thread.Sleep(100);
                         cells[currentCell.Row - 1, currentCell.Col + 1].PerformClick();
                     }
                 }
@@ -110,7 +118,7 @@ namespace Minesweeper
                 if (targetColor == cells[currentCell.Row + 1, currentCell.Col].BackColor)
                 {
                     //slow down program by 1 second each click
-                    Thread.Sleep(100);
+                    //Thread.Sleep(100);
                     cells[currentCell.Row + 1, currentCell.Col].PerformClick();
                 }
                 if (currentCell.Col > 0)
@@ -118,7 +126,7 @@ namespace Minesweeper
                     if (targetColor == cells[currentCell.Row + 1, currentCell.Col - 1].BackColor)
                     {
                         //slow down program by 1 second each click
-                        Thread.Sleep(100);
+                        //Thread.Sleep(100);
                         cells[currentCell.Row + 1, currentCell.Col - 1].PerformClick();
                     }
                 }
@@ -127,7 +135,7 @@ namespace Minesweeper
                     if (targetColor == cells[currentCell.Row + 1, currentCell.Col + 1].BackColor)
                     {
                         //slow down program by 1 second each click
-                        Thread.Sleep(100);
+                        //Thread.Sleep(100);
                         cells[currentCell.Row + 1, currentCell.Col + 1].PerformClick();
                     }
                 }
@@ -147,6 +155,21 @@ namespace Minesweeper
             if (PlaceBombs != null)
             {
                 PlaceBombs(this, e);
+            }
+        }
+
+        //NEW CODE
+        public void GetRandomCells(Cell[,] cells)
+        {
+            RandomCellEventArgs e = new RandomCellEventArgs(cells);
+            MoveRandomCells(this, e);
+        }
+
+        protected virtual void MoveRandomCells(object sender, RandomCellEventArgs e)
+        {
+            if (RandomCell != null)
+            {
+                RandomCell(this, e);
             }
         }
 

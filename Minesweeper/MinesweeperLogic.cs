@@ -9,6 +9,8 @@ namespace Minesweeper
     internal class MinesweeperLogic
     {
         Random rand = new Random();
+        //NEW CODE
+        Cell[,] randomCells;
         public void PlaceBombsHandler(object sender, PlaceBombsEventArgs e)
         {
             //gets information of clicked locations x
@@ -26,12 +28,8 @@ namespace Minesweeper
                     //sets up new bomb location
                     Tuple<int, int> bombLocation = Tuple.Create(rand.Next(10), rand.Next(10));
 
-                    //NEW CODE I ADDED IN
-                    //adds new mine cell
-                    Cell cell = new Cell();
-                    cell.Row = bombLocation.Item1;
-                    cell.Col = bombLocation.Item2;
-                    cell.BackColor = Color.Green;
+                    //NEW CODE
+                    randomCells[bombLocation.Item1, bombLocation.Item2].BackColor = Color.Red;
 
                     //checks if valid locaiton
                     validChoice = CheckIfValidLocation(clickedRow, clickedCol, response, validChoice, bombLocation);
@@ -54,6 +52,12 @@ namespace Minesweeper
                 }
             }
             return validChoice;
+        }
+
+        //NEW CODE
+        public void RandomCellHandler(object sender, RandomCellEventArgs e)
+        {
+            randomCells = e.RandomCells;
         }
     }
 }
