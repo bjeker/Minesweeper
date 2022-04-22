@@ -43,6 +43,7 @@
             this.aboutInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.resetStatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,7 +67,8 @@
             // 
             this.gameToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.gameToolStripMenuItem1,
-            this.averageTimeToCompleteToolStripMenuItem});
+            this.averageTimeToCompleteToolStripMenuItem,
+            this.resetStatsToolStripMenuItem});
             this.gameToolStripMenuItem.Name = "gameToolStripMenuItem";
             this.gameToolStripMenuItem.Size = new System.Drawing.Size(62, 24);
             this.gameToolStripMenuItem.Text = "Game";
@@ -76,12 +78,14 @@
             this.gameToolStripMenuItem1.Name = "gameToolStripMenuItem1";
             this.gameToolStripMenuItem1.Size = new System.Drawing.Size(271, 26);
             this.gameToolStripMenuItem1.Text = "Win/Loss Ratio";
+            this.gameToolStripMenuItem1.Click += new System.EventHandler(this.gameToolStripMenuItem1_Click);
             // 
             // averageTimeToCompleteToolStripMenuItem
             // 
             this.averageTimeToCompleteToolStripMenuItem.Name = "averageTimeToCompleteToolStripMenuItem";
             this.averageTimeToCompleteToolStripMenuItem.Size = new System.Drawing.Size(271, 26);
             this.averageTimeToCompleteToolStripMenuItem.Text = "Average Time to Complete";
+            this.averageTimeToCompleteToolStripMenuItem.Click += new System.EventHandler(this.averageTimeToCompleteToolStripMenuItem_Click);
             // 
             // restartToolStripMenuItem
             // 
@@ -126,6 +130,7 @@
             this.helpInstructionsToolStripMenuItem.Name = "helpInstructionsToolStripMenuItem";
             this.helpInstructionsToolStripMenuItem.Size = new System.Drawing.Size(203, 26);
             this.helpInstructionsToolStripMenuItem.Text = "Help Instructions";
+            this.helpInstructionsToolStripMenuItem.Click += new System.EventHandler(this.helpInstructionsToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -140,6 +145,7 @@
             this.aboutInformationToolStripMenuItem.Name = "aboutInformationToolStripMenuItem";
             this.aboutInformationToolStripMenuItem.Size = new System.Drawing.Size(215, 26);
             this.aboutInformationToolStripMenuItem.Text = "About Information";
+            this.aboutInformationToolStripMenuItem.Click += new System.EventHandler(this.aboutInformationToolStripMenuItem_Click);
             // 
             // label1
             // 
@@ -155,6 +161,13 @@
             // 
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // resetStatsToolStripMenuItem
+            // 
+            this.resetStatsToolStripMenuItem.Name = "resetStatsToolStripMenuItem";
+            this.resetStatsToolStripMenuItem.Size = new System.Drawing.Size(271, 26);
+            this.resetStatsToolStripMenuItem.Text = "Reset Stats";
+            this.resetStatsToolStripMenuItem.Click += new System.EventHandler(this.resetStatsToolStripMenuItem_Click);
             // 
             // MinesweeperGUI
             // 
@@ -190,5 +203,6 @@
         private ToolStripMenuItem aboutInformationToolStripMenuItem;
         private Label label1;
         private System.Windows.Forms.Timer timer1;
+        private ToolStripMenuItem resetStatsToolStripMenuItem;
     }
 }

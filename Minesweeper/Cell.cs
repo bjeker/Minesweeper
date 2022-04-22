@@ -15,13 +15,17 @@ namespace Minesweeper
         //button
         Button cellButton = new Button();
         Random rand = new Random();
-        //cell content
-        char cellContent = ' ';
         //size of cell
         int sizeOfCell = 32;
         //location of the cells
         int row = -1;
         int col = -1;
+
+        //NEW CODE
+        Label cellLabel = new Label();
+        int nearbyBombs = 0;
+        bool isBomb = false;
+
 
         public EventHandler CellClick;
 
@@ -39,8 +43,16 @@ namespace Minesweeper
             cellButton.Click += ButtonCLickHandler;
             //each cell has a button to be clicked
             this.Controls.Add(cellButton);
-            //randomize cell colors
             this.BackColor = Color.White;
+
+            //NEW CODE
+            cellLabel.Size = new Size(sizeOfCell, sizeOfCell);
+            cellLabel.Font = new Font("Calibri", 12);
+            cellLabel.Text = "";
+            cellLabel.ForeColor = Color.Red;
+            cellLabel.Visible = true;
+            cellLabel.Location = new Point(6, 6);
+            this.Controls.Add(cellLabel);
         }
 
         //size, button, row, and col getters and setters
@@ -48,6 +60,13 @@ namespace Minesweeper
         public Button button { get => button; }
         public int Row { get => row; set => row = value; }
         public int Col { get => col; set => col = value; }
+
+        //NEW CODE
+        public Label Label { get => cellLabel; }
+        public int NearbyBombs { get => nearbyBombs; set => nearbyBombs = value; }
+        public bool IsBomb { get => isBomb; set => isBomb = value; }
+        public virtual System.Drawing.Color ForeColor { get; set; }
+
 
         //when button is clicked
         public void ButtonCLickHandler(object sender, EventArgs e)

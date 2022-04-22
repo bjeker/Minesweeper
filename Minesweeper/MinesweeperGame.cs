@@ -16,9 +16,6 @@ namespace Minesweeper
             //instances of gui and logic classes
             gui = new MinesweeperGUI();
             logic = new MinesweeperLogic();
-            //NEW CODE
-            gui.RandomCell += logic.RandomCellHandler;
-            //END NEW CODE
             gui.PlaceBombs += logic.PlaceBombsHandler;
             Application.Run(gui);
         }

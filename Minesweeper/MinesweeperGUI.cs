@@ -4,12 +4,14 @@ namespace Minesweeper
     {
         public delegate void PlaceBombsEventHandler(object sender, PlaceBombsEventArgs e);
         public event PlaceBombsEventHandler PlaceBombs;
-        //NEW CODE
-        public delegate void RandomCellEventHandler(object sender, RandomCellEventArgs e);
-        public event RandomCellEventHandler RandomCell;
-        //END OF NEW CODE
+
         bool firstClick = true;
         Cell[,] cells = new Cell[10, 10];
+        //count for timer tick
+        int count = 0;
+        //determines win condition
+        int clicks = 0;
+
 
         public MinesweeperGUI()
         {
@@ -37,9 +39,6 @@ namespace Minesweeper
                     this.Controls.Add(cells[row, col]);
                 }
             }
-
-            //NEW CODE
-            GetRandomCells(cells);
         }
         //when cells are clicked
         public void CellClickHandler(object sender, EventArgs e)
@@ -53,98 +52,201 @@ namespace Minesweeper
                 //NEW CODE ADDED CURRENT CELL TO END
                 PlaceBombsNow(currentCell.Row, currentCell.Col);
                 firstClick = false;
-            }    
-            CheckAbove(currentCell, targetColor);
-            CheckBelow(currentCell, targetColor);
+            }
 
-            //column is positive
-            if (currentCell.Col > 0)
+            //cell checks
+            CheckAboveCorners(currentCell, targetColor);
+            CheckBelowCorners(currentCell, targetColor);
+            CheckAround(currentCell, targetColor);
+
+            //used to determine win
+            clicks++;
+
+            //win condition
+            if (clicks == 81)
             {
-                if (targetColor == cells[currentCell.Row, currentCell.Col - 1].BackColor)
+                if (currentCell.BackColor != Color.Red)
                 {
-                    //slow down program by 1 second each click
-                    //Thread.Sleep(100);
-                    cells[currentCell.Row, currentCell.Col - 1].PerformClick();
+                    Properties.Settings.Default.wins++;
+                    MessageBox.Show("YOU WON!");
                 }
             }
-            if (currentCell.Col < cells.GetLength(1) - 1)
+
+            //lost condition
+            if (currentCell.BackColor == Color.Red)
             {
-                if (targetColor == cells[currentCell.Row, currentCell.Col + 1].BackColor)
-                {
-                    //slow down program by 1 second each click
-                    //Thread.Sleep(100);
-                    cells[currentCell.Row, currentCell.Col + 1].PerformClick();
-                }
+                MessageBox.Show("BOOM! YOU LOST!");
+                Properties.Settings.Default.time = count;
+                Properties.Settings.Default.losses++;
+                Properties.Settings.Default.Save();
+                timer1.Enabled = false;
             }
         }
 
-        //check above
-        private void CheckAbove(Cell currentCell, Color targetColor)
+        //checks around cell
+        private void CheckAround(Cell currentCell, Color targetColor)
+        {
+            //check above cell
+            if (currentCell.Row > 0)
+            {
+                if (cells[currentCell.Row - 1, currentCell.Col].IsBomb)
+                {
+                    cells[currentCell.Row, currentCell.Col].NearbyBombs++;
+                }
+
+            }
+            //check left of cell
+            if (currentCell.Col > 0)
+            {
+                if (cells[currentCell.Row, currentCell.Col - 1].IsBomb)
+                {
+                    cells[currentCell.Row, currentCell.Col].NearbyBombs++;
+                }
+            }
+            //check right of cell
+            if (currentCell.Col < cells.GetLength(1) - 1)
+            {
+                if (cells[currentCell.Row, currentCell.Col + 1].IsBomb)
+                {
+                    cells[currentCell.Row, currentCell.Col].NearbyBombs++;
+                }
+            }
+
+            //check below cell
+            if (currentCell.Row < cells.GetLength(0) - 1)
+            {
+                if (cells[currentCell.Row + 1, currentCell.Col].IsBomb)
+                {
+                    cells[currentCell.Row, currentCell.Col].NearbyBombs++;
+                }
+            }
+
+            //no nearby bombs
+            if (currentCell.NearbyBombs == 0)
+            {
+                if (currentCell.Row > 0)
+                {
+                    if (targetColor == cells[currentCell.Row - 1, currentCell.Col].BackColor)
+                    {
+                        cells[currentCell.Row - 1, currentCell.Col].PerformClick();
+                    }
+                }
+
+                if (currentCell.Col > 0)
+                {
+                    if (targetColor == cells[currentCell.Row, currentCell.Col - 1].BackColor)
+                    {
+                        cells[currentCell.Row, currentCell.Col - 1].PerformClick();
+                    }
+                }
+
+                if (currentCell.Col < cells.GetLength(1) - 1)
+                {
+                    if (targetColor == cells[currentCell.Row, currentCell.Col + 1].BackColor)
+                    {
+                        cells[currentCell.Row, currentCell.Col + 1].PerformClick();
+                    }
+                }
+
+                if (currentCell.Row < cells.GetLength(0) - 1)
+                {
+                    if (targetColor == cells[currentCell.Row + 1, currentCell.Col].BackColor)
+                    {
+                        cells[currentCell.Row + 1, currentCell.Col].PerformClick();
+                    }
+                }
+            }
+
+            if (!currentCell.IsBomb)
+            {
+                ShowNearbyBombs(currentCell);
+            }
+        }
+
+        //check top right and left corners
+        private void CheckAboveCorners(Cell currentCell, Color targetColor)
         {
             if (currentCell.Row > 0)
             {
-                if (targetColor == cells[currentCell.Row - 1, currentCell.Col].BackColor)
-                {
-                    //slow down program by 1 second each click
-                    //Thread.Sleep(100);
-                    cells[currentCell.Row - 1, currentCell.Col].PerformClick();
-                }
                 if (currentCell.Col > 0)
                 {
-                    if (targetColor == cells[currentCell.Row - 1, currentCell.Col - 1].BackColor)
+                    if (cells[currentCell.Row - 1, currentCell.Col - 1].IsBomb)
                     {
-                        //slow down program by 1 second each click
-                        //Thread.Sleep(100);
-                        cells[currentCell.Row - 1, currentCell.Col - 1].PerformClick();
+
+                        cells[currentCell.Row, currentCell.Col].NearbyBombs++;
                     }
                 }
                 if (currentCell.Col < cells.GetLength(1) - 1)
                 {
-                    if (targetColor == cells[currentCell.Row - 1, currentCell.Col + 1].BackColor)
+                    if (cells[currentCell.Row - 1, currentCell.Col + 1].IsBomb)
                     {
-                        //slow down program by 1 second each click
-                        //Thread.Sleep(100);
-                        cells[currentCell.Row - 1, currentCell.Col + 1].PerformClick();
+
+                        cells[currentCell.Row, currentCell.Col].NearbyBombs++;
                     }
                 }
             }
         }
 
-        //check below
-        private void CheckBelow(Cell currentCell, Color targetColor)
+        //check bottom right and left corners
+        private void CheckBelowCorners(Cell currentCell, Color targetColor)
         {
             if (currentCell.Row < cells.GetLength(0) - 1)
             {
-                if (targetColor == cells[currentCell.Row + 1, currentCell.Col].BackColor)
-                {
-                    //slow down program by 1 second each click
-                    //Thread.Sleep(100);
-                    cells[currentCell.Row + 1, currentCell.Col].PerformClick();
-                }
                 if (currentCell.Col > 0)
                 {
-                    if (targetColor == cells[currentCell.Row + 1, currentCell.Col - 1].BackColor)
+                    if (cells[currentCell.Row + 1, currentCell.Col - 1].IsBomb)
                     {
-                        //slow down program by 1 second each click
-                        //Thread.Sleep(100);
-                        cells[currentCell.Row + 1, currentCell.Col - 1].PerformClick();
+                        cells[currentCell.Row, currentCell.Col].NearbyBombs++;
                     }
                 }
                 if (currentCell.Col < cells.GetLength(1) - 1)
                 {
-                    if (targetColor == cells[currentCell.Row + 1, currentCell.Col + 1].BackColor)
+                    if (cells[currentCell.Row + 1, currentCell.Col + 1].IsBomb)
                     {
-                        //slow down program by 1 second each click
-                        //Thread.Sleep(100);
-                        cells[currentCell.Row + 1, currentCell.Col + 1].PerformClick();
+                        cells[currentCell.Row, currentCell.Col].NearbyBombs++;
                     }
                 }
             }
         }
 
+        //shows nearby bombs
+        public void ShowNearbyBombs(Cell currentCell)
+        {
+            int bombs = cells[currentCell.Row, currentCell.Col].NearbyBombs;
+            if (bombs > 0)
+            {
+
+                cells[currentCell.Row, currentCell.Col].Label.Text = $"{bombs}";
+
+                switch (bombs)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        cells[currentCell.Row, currentCell.Col].Label.ForeColor = Color.Blue;
+                        break;
+                    case 2:
+                        cells[currentCell.Row, currentCell.Col].Label.ForeColor = Color.Green;
+                        break;
+                    case 3:
+                        cells[currentCell.Row, currentCell.Col].Label.ForeColor = Color.Red;
+                        break;
+                    case 4:
+                        cells[currentCell.Row, currentCell.Col].Label.ForeColor = Color.Purple;
+                        break;
+                    case 5:
+                        cells[currentCell.Row, currentCell.Col].Label.ForeColor = Color.Orange;
+                        break;
+                }
+
+                cells[currentCell.Row, currentCell.Col].Refresh();
+            }
+        }
+
+        //prepares to place bombs
         public void PlaceBombsNow(int row, int col)
         {
-            PlaceBombsEventArgs e = new PlaceBombsEventArgs(row, col);
+            PlaceBombsEventArgs e = new PlaceBombsEventArgs(row, col, cells);
             PlaceTheBombs(this, e);
         }
 
@@ -155,21 +257,6 @@ namespace Minesweeper
             if (PlaceBombs != null)
             {
                 PlaceBombs(this, e);
-            }
-        }
-
-        //NEW CODE
-        public void GetRandomCells(Cell[,] cells)
-        {
-            RandomCellEventArgs e = new RandomCellEventArgs(cells);
-            MoveRandomCells(this, e);
-        }
-
-        protected virtual void MoveRandomCells(object sender, RandomCellEventArgs e)
-        {
-            if (RandomCell != null)
-            {
-                RandomCell(this, e);
             }
         }
 
@@ -185,12 +272,48 @@ namespace Minesweeper
             Application.Restart();
         }
 
-        //count for timer tick
-        private int count = 0;
+        //controls timer
         private void timer1_Tick(object sender, EventArgs e)
         {
-            count++;
-            label1.Text = count.ToString();
+            if (!firstClick)
+            {
+                count++;
+                label1.Text = count.ToString();
+            }
+        }
+
+        //average time to complete
+        private void averageTimeToCompleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Average Time: " + (Properties.Settings.Default.time / (Properties.Settings.Default.wins + Properties.Settings.Default.losses)) + " seconds");
+        }
+
+        //help about the program
+        private void helpInstructionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Welcome to minesweeper!\nClick a square to begin, the numbers show how close to a bomb the click is.\nDon't blow up!");
+        }
+
+        //info about program
+        private void aboutInformationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Coded by Ryan Bieker\nCoded by 4/22/22\nCoded for CS 3020 Class");
+        }
+
+        //win los ratio
+        private void gameToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Wins: " + Properties.Settings.Default.wins + "\n Losses: " + Properties.Settings.Default.losses);
+
+        }
+
+        //reset all stats
+        private void resetStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.time = 0;
+            Properties.Settings.Default.losses = 0;
+            Properties.Settings.Default.wins = 0;
+            Properties.Settings.Default.Save();
         }
     }
 }
